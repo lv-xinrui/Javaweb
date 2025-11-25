@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${news != null ? news.title + ' - 文华学院' : '新闻详情 - 文华学院'}">新闻详情 - 文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-university me-2"></i>文华学院
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/news">新闻中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/announcements">公告通知</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/media">媒体关注</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/departments">学部设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- 面包屑导航 -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">首页</a></li>
+                        <li class="breadcrumb-item"><a href="/news">新闻中心</a></li>
+                        <li class="breadcrumb-item active" th:text="${news != null ? news.title : '新闻详情'}"></li>
+                    </ol>
+                </nav>
+
+                <!-- 新闻内容 -->
+                <div th:if="${news != null}" class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-4" th:if="${news.imageUrl != null and !news.imageUrl.empty}">
+                            <img th:src="${news.imageUrl}" class="img-fluid rounded" alt="新闻图片">
+                        </div>
+
+                        <h1 class="card-title text-center mb-4" th:text="${news.title}"></h1>
+
+                        <div class="text-center text-muted mb-4">
+                            <span class="badge bg-primary me-2" th:text="${news.category}"></span>
+                            <span th:if="${news.isTop}" class="badge bg-danger me-2">置顶</span>
+                            <i class="fas fa-calendar me-1"></i>
+                            <span th:text="${#temporals.format(news.createTime, 'yyyy年MM月dd日 HH:mm')}"></span>
+                            <i class="fas fa-user ms-3 me-1"></i>
+                            <span th:text="${news.author != null ? news.author : '文华学院'}"></span>
+                            <i class="fas fa-eye ms-3 me-1"></i>
+                            <span th:text="${news.viewCount}"></span>
+                        </div>
+
+                        <hr>
+
+                        <div class="news-content" th:utext="${news.content}">
+                            <!-- 新闻内容将在这里显示 -->
+                        </div>
+
+                        <hr class="mt-5">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted">
+                                    最后更新：<span
+                                        th:text="${#temporals.format(news.updateTime, 'yyyy-MM-dd HH:mm')}"></span>
+                                </small>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="window.print()">
+                                    <i class="fas fa-print me-1"></i>打印
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="shareNews()">
+                                    <i class="fas fa-share me-1"></i>分享
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 新闻不存在 -->
+                <div th:if="${news == null}" class="text-center py-5">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                    <h4>新闻不存在</h4>
+                    <p class="text-muted">您访问的新闻不存在或已被删除。</p>
+                    <a href="/news" class="btn btn-primary">返回新闻列表</a>
+                </div>
+
+                <!-- 返回按钮 -->
+                <div class="text-center mt-4" th:if="${news != null}">
+                    <a href="/news" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left me-1"></i>返回新闻列表
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="text-center">
+                <p>&copy; 2024 文华学院 鄂ICP备09023313号 鄂公网安备42018502003292号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function shareNews() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    url: window.location.href
+                });
+            } else {
+                // 复制链接到剪贴板
+                navigator.clipboard.writeText(window.location.href).then(function () {
+                    alert('链接已复制到剪贴板');
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

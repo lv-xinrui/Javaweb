@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.javaweb01.mapper.CourseMapper">
+
+    <!-- 课程结果映射 -->
+    <resultMap id="CourseResultMap" type="com.example.javaweb01.entity.Course">
+        <id column="id" property="id"/>
+        <result column="course_code" property="courseCode"/>
+        <result column="course_name" property="courseName"/>
+        <result column="credits" property="credits"/>
+        <result column="course_type" property="courseType"/>
+        <result column="department" property="department"/>
+        <result column="teacher_name" property="teacherName"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 根据ID查询课程 -->
+    <select id="findById" resultMap="CourseResultMap">
+        SELECT * FROM courses WHERE id = #{id} AND status = 1
+    </select>
+
+    <!-- 插入课程 -->
+    <insert id="insert" parameterType="com.example.javaweb01.entity.Course" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO courses (course_code, course_name, credits, course_type, department, teacher_name, description, status, create_time)
+        VALUES (#{courseCode}, #{courseName}, #{credits}, #{courseType}, #{department}, #{teacherName}, #{description}, #{status}, #{createTime})
+    </insert>
+
+    <!-- 更新课程 -->
+    <update id="update" parameterType="com.example.javaweb01.entity.Course">
+        UPDATE courses SET
+            course_name = #{courseName},
+            credits = #{credits},
+            course_type = #{courseType},
+            department = #{department},
+            teacher_name = #{teacherName},
+            description = #{description},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

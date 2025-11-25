@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-university me-2"></i>文华学院
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">首页</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            文华概况
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">学校简介</a></li>
+                            <li><a class="dropdown-item" href="#">学校文化</a></li>
+                            <li><a class="dropdown-item" href="#">领导介绍</a></li>
+                            <li><a class="dropdown-item" href="#">校园风光</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            学部设置
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/departments">所有学部</a></li>
+                            <li th:each="dept : ${departments}">
+                                <a class="dropdown-item" th:href="@{/departments/detail(id=${dept.id})}"
+                                    th:text="${dept.name}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news">新闻中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/announcements">公告通知</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/media">媒体关注</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/student">学生</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/faculty">教职工</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alumni">校友</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/visitor">访客</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container my-4">
+        <!-- 轮播图 -->
+        <div id="carouselExample" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/images/campus/mountain-fog-1.jpg" class="d-block w-100"
+                        style="height: 450px; object-fit: cover;" alt="文华学院校园风光 - 云雾缭绕的山峦"
+                        onerror="this.src='https://via.placeholder.com/1200x450/007bff/ffffff?text=文华学院校园风光'">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>文华学院校园风光</h5>
+                        <p>云雾缭绕的山峦，展现校园优美的自然环境</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/campus/green-hills-1.jpg" class="d-block w-100"
+                        style="height: 450px; object-fit: cover;" alt="文华学院学术环境 - 翠绿山丘"
+                        onerror="this.src='https://via.placeholder.com/1200x450/28a745/ffffff?text=学术研究环境'">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>学术研究环境</h5>
+                        <p>翠绿山丘环绕，为学术研究提供宁静的环境</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/campus/student-life-1.jpg" class="d-block w-100"
+                        style="height: 450px; object-fit: cover;" alt="文华学院学生生活 - 校园生活"
+                        onerror="this.src='https://via.placeholder.com/1200x450/dc3545/ffffff?text=学生生活'">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>学生生活</h5>
+                        <p>丰富多彩的校园生活，培养全面发展的人才</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/campus/cloud-sea.jpg" class="d-block w-100"
+                        style="height: 450px; object-fit: cover;" alt="文华学院校园美景 - 云海奇观"
+                        onerror="this.src='https://via.placeholder.com/1200x450/17a2b8/ffffff?text=校园美景'">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>校园美景</h5>
+                        <p>云海奇观，展现文华学院独特的自然魅力</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/campus/mountain-trail.jpg" class="d-block w-100"
+                        style="height: 450px; object-fit: cover;" alt="文华学院校园环境 - 山间小径"
+                        onerror="this.src='https://via.placeholder.com/1200x450/6f42c1/ffffff?text=校园环境'">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>校园环境</h5>
+                        <p>山间小径，为师生提供休闲漫步的好去处</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+            <!-- 轮播图指示器 -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3"
+                    aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4"
+                    aria-label="Slide 5"></button>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 左侧内容 -->
+            <div class="col-lg-8">
+                <!-- 文华要闻 -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-newspaper me-2"></i>文华要闻
+                            <a href="/news" class="btn btn-sm btn-outline-light float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${topNews != null and !topNews.empty}">
+                            <div th:each="news : ${topNews}" class="news-item mb-3">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6 class="news-title">
+                                            <a th:href="@{/news/detail(id=${news.id})}" th:text="${news.title}"
+                                                class="text-decoration-none"></a>
+                                            <span th:if="${news.isTop}" class="badge bg-danger ms-2">置顶</span>
+                                        </h6>
+                                        <p class="news-summary text-muted" th:text="${news.summary}"></p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            <span th:text="${#temporals.format(news.createTime, 'yyyy-MM-dd')}"></span>
+                                            <i class="fas fa-eye ms-2 me-1"></i>
+                                            <span th:text="${news.viewCount}"></span>
+                                        </small>
+                                    </div>
+                                    <div class="col-md-4" th:if="${news.imageUrl != null and !news.imageUrl.empty}">
+                                        <img th:src="${news.imageUrl}" class="img-fluid rounded" alt="新闻图片">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${topNews == null or topNews.empty}" class="text-center text-muted">
+                            <p>暂无文华要闻</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 综合新闻 -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i>综合新闻
+                            <a href="/news" class="btn btn-sm btn-outline-light float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${generalNews != null and !generalNews.empty}">
+                            <div th:each="news : ${generalNews}" class="news-item mb-2">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="news-title mb-1">
+                                            <a th:href="@{/news/detail(id=${news.id})}" th:text="${news.title}"
+                                                class="text-decoration-none"></a>
+                                        </h6>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            <span th:text="${#temporals.format(news.createTime, 'MM-dd')}"></span>
+                                            <i class="fas fa-eye ms-2 me-1"></i>
+                                            <span th:text="${news.viewCount}"></span>
+                                        </small>
+                                    </div>
+                                    <div th:if="${news.imageUrl != null and !news.imageUrl.empty}" class="ms-3">
+                                        <img th:src="${news.imageUrl}" class="img-thumbnail"
+                                            style="width: 80px; height: 60px;" alt="新闻图片">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${generalNews == null or generalNews.empty}" class="text-center text-muted">
+                            <p>暂无综合新闻</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧边栏 -->
+            <div class="col-lg-4">
+                <!-- 公告通知 -->
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bullhorn me-2"></i>公告通知
+                            <a href="/announcements" class="btn btn-sm btn-outline-dark float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${announcements != null and !announcements.empty}">
+                            <div th:each="announcement : ${announcements}" class="announcement-item mb-2">
+                                <h6 class="announcement-title">
+                                    <a th:href="@{/announcements/detail(id=${announcement.id})}"
+                                        th:text="${announcement.title}" class="text-decoration-none"></a>
+                                    <span th:if="${announcement.isImportant}" class="badge bg-danger ms-1">重要</span>
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    <span th:text="${#temporals.format(announcement.createTime, 'MM-dd')}"></span>
+                                </small>
+                            </div>
+                        </div>
+                        <div th:if="${announcements == null or announcements.empty}" class="text-center text-muted">
+                            <p>暂无公告通知</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 媒体关注 -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-tv me-2"></i>媒体关注
+                            <a href="/media" class="btn btn-sm btn-outline-light float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mediaReports != null and !mediaReports.empty}">
+                            <div th:each="media : ${mediaReports}" class="media-item mb-2">
+                                <h6 class="media-title">
+                                    <a th:href="@{/media/detail(id=${media.id})}" th:text="${media.title}"
+                                        class="text-decoration-none"></a>
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-newspaper me-1"></i>
+                                    <span th:text="${media.mediaSource}"></span>
+                                    <i class="fas fa-calendar ms-2 me-1"></i>
+                                    <span th:text="${#temporals.format(media.createTime, 'MM-dd')}"></span>
+                                </small>
+                            </div>
+                        </div>
+                        <div th:if="${mediaReports == null or mediaReports.empty}" class="text-center text-muted">
+                            <p>暂无媒体报道</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 校园风光 -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-mountain me-2"></i>校园风光
+                            <a href="#" class="btn btn-sm btn-outline-light float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <div class="campus-image-container">
+                                    <img src="/images/campus/mountain-fog-1.jpg" alt="云雾缭绕的山峦"
+                                        class="img-fluid rounded campus-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#campusModal"
+                                        data-bs-image="/images/campus/mountain-fog-1.jpg" data-bs-title="云雾缭绕的山峦">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="campus-image-container">
+                                    <img src="/images/campus/green-hills-1.jpg" alt="翠绿山丘"
+                                        class="img-fluid rounded campus-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#campusModal"
+                                        data-bs-image="/images/campus/green-hills-1.jpg" data-bs-title="翠绿山丘">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="campus-image-container">
+                                    <img src="/images/campus/mountain-trail.jpg" alt="山间小径"
+                                        class="img-fluid rounded campus-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#campusModal"
+                                        data-bs-image="/images/campus/mountain-trail.jpg" data-bs-title="山间小径">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="campus-image-container">
+                                    <img src="/images/campus/cloud-sea.jpg" alt="云海奇观"
+                                        class="img-fluid rounded campus-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#campusModal"
+                                        data-bs-image="/images/campus/cloud-sea.jpg" data-bs-title="云海奇观">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学术展示 -->
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="fas fa-graduation-cap me-2"></i>学术展示
+                            <a href="#" class="btn btn-sm btn-outline-dark float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <div class="academic-image-container">
+                                    <img src="/images/campus/misty-mountain.jpg" alt="学术研究环境"
+                                        class="img-fluid rounded academic-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#academicModal"
+                                        data-bs-image="/images/campus/misty-mountain.jpg" data-bs-title="学术研究环境">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="academic-image-container">
+                                    <img src="/images/campus/mountain-fog-1.jpg" alt="科研氛围"
+                                        class="img-fluid rounded academic-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#academicModal"
+                                        data-bs-image="/images/campus/mountain-fog-1.jpg" data-bs-title="科研氛围">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="academic-image-container">
+                                    <img src="/images/campus/green-hills-1.jpg" alt="学术交流"
+                                        class="img-fluid rounded academic-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#academicModal"
+                                        data-bs-image="/images/campus/green-hills-1.jpg" data-bs-title="学术交流">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="academic-image-container">
+                                    <img src="/images/campus/cloud-sea.jpg" alt="学术成就"
+                                        class="img-fluid rounded academic-image"
+                                        style="width: 100%; height: 80px; object-fit: cover; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#academicModal"
+                                        data-bs-image="/images/campus/cloud-sea.jpg" data-bs-title="学术成就">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学部设置 -->
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-building me-2"></i>学部设置
+                            <a href="/departments" class="btn btn-sm btn-outline-light float-end">更多>></a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${departments != null and !departments.empty}">
+                            <div class="row">
+                                <div th:each="dept : ${departments}" class="col-6 mb-2">
+                                    <a th:href="@{/departments/detail(id=${dept.id})}" th:text="${dept.name}"
+                                        class="btn btn-outline-secondary btn-sm w-100"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${departments == null or departments.empty}" class="text-center text-muted">
+                            <p>暂无学部信息</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 校园风光模态框 -->
+    <div class="modal fade" id="campusModal" tabindex="-1" aria-labelledby="campusModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="campusModalLabel">校园风光</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="campusModalImage" src="" alt="" class="img-fluid rounded">
+                    <p id="campusModalTitle" class="mt-3 text-muted"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 学术展示模态框 -->
+    <div class="modal fade" id="academicModal" tabindex="-1" aria-labelledby="academicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="academicModalLabel">学术展示</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="academicModalImage" src="" alt="" class="img-fluid rounded">
+                    <p id="academicModalTitle" class="mt-3 text-muted"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>文华学院</h5>
+                    <p>地址：武汉市东湖新技术开发区文华园路8号</p>
+                    <p>邮政编码：430074</p>
+                    <p>电话：027-87599238、87599065</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>常用链接</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-light">图书馆</a></li>
+                                <li><a href="#" class="text-light">教务在线</a></li>
+                                <li><a href="#" class="text-light">学工在线</a></li>
+                                <li><a href="#" class="text-light">精品课程</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-light">人才招聘</a></li>
+                                <li><a href="#" class="text-light">信息公开</a></li>
+                                <li><a href="#" class="text-light">交通导航</a></li>
+                                <li><a href="#" class="text-light">文华漫游</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p>&copy; 2024 文华学院 鄂ICP备09023313号 鄂公网安备42018502003292号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        // 校园风光模态框功能
+        document.addEventListener('DOMContentLoaded', function () {
+            const campusModal = document.getElementById('campusModal');
+            const academicModal = document.getElementById('academicModal');
+
+            // 校园风光图片点击事件
+            campusModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const imageSrc = button.getAttribute('data-bs-image');
+                const imageTitle = button.getAttribute('data-bs-title');
+
+                const modalImage = campusModal.querySelector('#campusModalImage');
+                const modalTitle = campusModal.querySelector('#campusModalTitle');
+
+                modalImage.src = imageSrc;
+                modalImage.alt = imageTitle;
+                modalTitle.textContent = imageTitle;
+            });
+
+            // 学术展示图片点击事件
+            academicModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const imageSrc = button.getAttribute('data-bs-image');
+                const imageTitle = button.getAttribute('data-bs-title');
+
+                const modalImage = academicModal.querySelector('#academicModalImage');
+                const modalTitle = academicModal.querySelector('#academicModalTitle');
+
+                modalImage.src = imageSrc;
+                modalImage.alt = imageTitle;
+                modalTitle.textContent = imageTitle;
+            });
+        });
+    </script>
+</body>
+
+</html>

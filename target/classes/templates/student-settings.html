@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统设置 - 文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/student/dashboard"><i class="fas fa-arrow-left me-2"></i>返回仪表板</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text"><i class="fas fa-user me-1"></i><span th:text="${student.name}"></span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h3 class="mb-3"><i class="fas fa-cog me-2 text-secondary"></i>系统设置</h3>
+
+        <div class="card mb-4">
+            <div class="card-header">修改密码</div>
+            <div class="card-body">
+                <div class="alert alert-info mb-0">演示页面：此处仅展示表单样式，提交逻辑未实现。</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">偏好设置</div>
+            <div class="card-body">
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="darkMode" disabled>
+                    <label class="form-check-label" for="darkMode">深色模式（演示）</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.javaweb01.mapper.ScheduleMapper">
+
+    <!-- 课表结果映射 -->
+    <resultMap id="ScheduleResultMap" type="com.example.javaweb01.entity.Schedule">
+        <id column="id" property="id"/>
+        <result column="student_id" property="studentId"/>
+        <result column="course_id" property="courseId"/>
+        <result column="semester" property="semester"/>
+        <result column="week_day" property="weekDay"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="classroom" property="classroom"/>
+        <result column="week_range" property="weekRange"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        
+        <!-- 关联的课程信息 -->
+        <association property="course" javaType="com.example.javaweb01.entity.Course">
+            <id column="course_id" property="id"/>
+            <result column="course_code" property="courseCode"/>
+            <result column="course_name" property="courseName"/>
+            <result column="credits" property="credits"/>
+            <result column="course_type" property="courseType"/>
+            <result column="teacher_name" property="teacherName"/>
+        </association>
+    </resultMap>
+
+    <!-- 根据学号和学期查询课表 -->
+    <select id="findByStudentIdAndSemester" resultMap="ScheduleResultMap">
+        SELECT s.*, c.course_code, c.course_name, c.credits, c.course_type, c.teacher_name
+        FROM schedules s
+        LEFT JOIN courses c ON s.course_id = c.id
+        WHERE s.student_id = #{studentId} AND s.semester = #{semester}
+        ORDER BY s.week_day, s.start_time
+    </select>
+
+    <!-- 根据学号查询所有课表 -->
+    <select id="findByStudentId" resultMap="ScheduleResultMap">
+        SELECT s.*, c.course_code, c.course_name, c.credits, c.course_type, c.teacher_name
+        FROM schedules s
+        LEFT JOIN courses c ON s.course_id = c.id
+        WHERE s.student_id = #{studentId}
+        ORDER BY s.semester DESC, s.week_day, s.start_time
+    </select>
+
+    <!-- 根据学号查询当前学期课表 -->
+    <select id="findCurrentSemesterByStudentId" resultMap="ScheduleResultMap">
+        SELECT s.*, c.course_code, c.course_name, c.credits, c.course_type, c.teacher_name
+        FROM schedules s
+        LEFT JOIN courses c ON s.course_id = c.id
+        WHERE s.student_id = #{studentId} 
+        AND s.semester = (
+            SELECT MAX(semester) FROM schedules WHERE student_id = #{studentId}
+        )
+        ORDER BY s.week_day, s.start_time
+    </select>
+
+    <!-- 插入课表 -->
+    <insert id="insert" parameterType="com.example.javaweb01.entity.Schedule" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO schedules (student_id, course_id, semester, week_day, start_time, end_time, classroom, week_range, create_time)
+        VALUES (#{studentId}, #{courseId}, #{semester}, #{weekDay}, #{startTime}, #{endTime}, #{classroom}, #{weekRange}, #{createTime})
+    </insert>
+
+</mapper>

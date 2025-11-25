@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${department != null ? department.name + ' - 文华学院' : '学部详情 - 文华学院'}">学部详情 - 文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-university me-2"></i>文华学院
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            文华概况
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">学校简介</a></li>
+                            <li><a class="dropdown-item" href="#">学校文化</a></li>
+                            <li><a class="dropdown-item" href="#">领导介绍</a></li>
+                            <li><a class="dropdown-item" href="#">校园风光</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            学部设置
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/departments">所有学部</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news">新闻中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/announcements">公告通知</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/media">媒体关注</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/student">学生</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/faculty">教职工</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alumni">校友</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/visitor">访客</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container my-4">
+        <!-- 面包屑导航 -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">首页</a></li>
+                <li class="breadcrumb-item"><a href="/departments">学部设置</a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    th:text="${department != null ? department.name : '学部详情'}">学部详情</li>
+            </ol>
+        </nav>
+
+        <!-- 学部详情 -->
+        <div th:if="${department != null}">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0" th:text="${department.name}">学部名称</h4>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${department.description != null and !department.description.empty}"
+                                class="mb-4">
+                                <h5>学部简介</h5>
+                                <p class="text-muted" th:text="${department.description}">学部简介内容</p>
+                            </div>
+
+                            <div th:if="${department.dean != null and !department.dean.empty}" class="mb-4">
+                                <h5>学部主任</h5>
+                                <p class="text-muted" th:text="${department.dean}">学部主任</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- 联系信息 -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-phone me-2"></i>联系信息
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${department.phone != null and !department.phone.empty}" class="mb-3">
+                                <strong>电话：</strong>
+                                <span th:text="${department.phone}">联系电话</span>
+                            </div>
+                            <div th:if="${department.address != null and !department.address.empty}" class="mb-3">
+                                <strong>地址：</strong>
+                                <span th:text="${department.address}">联系地址</span>
+                            </div>
+                            <div th:if="${department.website != null and !department.website.empty}" class="mb-3">
+                                <strong>网站：</strong>
+                                <a th:href="${department.website}" target="_blank"
+                                    th:text="${department.website}">官方网站</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 学部统计 -->
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>学部统计
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-6 mb-3">
+                                    <div class="border-end">
+                                        <h4 class="text-primary">-</h4>
+                                        <small class="text-muted">教职工数</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h4 class="text-success">-</h4>
+                                    <small class="text-muted">学生数</small>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border-end">
+                                        <h4 class="text-warning">-</h4>
+                                        <small class="text-muted">专业数</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="text-info">-</h4>
+                                    <small class="text-muted">浏览次数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学部不存在 -->
+        <div th:if="${department == null}" class="text-center py-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h4 class="text-muted">学部不存在</h4>
+            <p class="text-muted">您访问的学部信息不存在或已被删除。</p>
+            <a href="/departments" class="btn btn-primary">返回学部列表</a>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>文华学院</h5>
+                    <p>地址：武汉市东湖新技术开发区文华园路8号</p>
+                    <p>邮政编码：430074</p>
+                    <p>电话：027-87599238、87599065</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>常用链接</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-light">图书馆</a></li>
+                                <li><a href="#" class="text-light">教务在线</a></li>
+                                <li><a href="#" class="text-light">学工在线</a></li>
+                                <li><a href="#" class="text-light">精品课程</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-light">人才招聘</a></li>
+                                <li><a href="#" class="text-light">信息公开</a></li>
+                                <li><a href="#" class="text-light">交通导航</a></li>
+                                <li><a href="#" class="text-light">文华漫游</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p>&copy; 2024 文华学院 鄂ICP备09023313号 鄂公网安备42018502003292号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

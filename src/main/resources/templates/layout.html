@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - 文华学院'">文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-university me-2"></i>文华学院
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            文华概况
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">学校简介</a></li>
+                            <li><a class="dropdown-item" href="#">学校文化</a></li>
+                            <li><a class="dropdown-item" href="#">领导介绍</a></li>
+                            <li><a class="dropdown-item" href="#">校园风光</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            学部设置
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/departments">所有学部</a></li>
+                            <li th:each="dept : ${departments}">
+                                <a class="dropdown-item" th:href="@{/departments/detail(id=${dept.id})}"
+                                    th:text="${dept.name}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news">新闻中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/announcements">公告通知</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/media">媒体关注</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/student">学生</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/faculty">教职工</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alumni">校友</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/visitor">访客</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main>
+        <div th:fragment="content">
+            <!-- 页面内容将在这里插入 -->
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>文华学院</h5>
+                    <p>地址：武汉市东湖新技术开发区文华园路8号</p>
+                    <p>邮政编码：430074</p>
+                    <p>电话：027-87599238、87599065</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>常用链接</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-light">图书馆</a></li>
+                                <li><a href="#" class="text-light">教务在线</a></li>
+                                <li><a href="#" class="text-light">学工在线</a></li>
+                                <li><a href="#" class="text-light">精品课程</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-light">人才招聘</a></li>
+                                <li><a href="#" class="text-light">信息公开</a></li>
+                                <li><a href="#" class="text-light">交通导航</a></li>
+                                <li><a href="#" class="text-light">文华漫游</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p>&copy; 2024 文华学院 鄂ICP备09023313号 鄂公网安备42018502003292号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩查询 - 文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-university me-2"></i>文华学院
+            </a>
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="/student/dashboard">
+                    <i class="fas fa-home me-1"></i>仪表板
+                </a>
+            </div>
+            <div class="navbar-nav">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user me-1"></i>
+                    <span th:text="${student.name}"></span>
+                </span>
+                <a class="nav-link" href="/student/logout">
+                    <i class="fas fa-sign-out-alt me-1"></i>退出
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container my-4">
+        <!-- 页面标题 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>
+                        <i class="fas fa-chart-line me-3"></i>成绩查询
+                    </h2>
+                    <div>
+                        <a href="/student/grades/all" class="btn btn-outline-primary">
+                            <i class="fas fa-list me-1"></i>所有成绩
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学期选择 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="get" th:action="@{/student/grades}">
+                            <div class="row align-items-end">
+                                <div class="col-md-4">
+                                    <label for="semester" class="form-label">选择学期</label>
+                                    <select class="form-select" id="semester" name="semester">
+                                        <option value="">当前学期</option>
+                                        <option value="2024春季" th:selected="${currentSemester == '2024春季'}">2024春季
+                                        </option>
+                                        <option value="2023秋季" th:selected="${currentSemester == '2023秋季'}">2023秋季
+                                        </option>
+                                        <option value="2023春季" th:selected="${currentSemester == '2023春季'}">2023春季
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-1"></i>查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成绩统计 -->
+        <div class="row mb-4" th:if="${grades != null and !grades.empty}">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-graduation-cap fa-2x mb-2"></i>
+                        <h5>总学分</h5>
+                        <h3 th:text="${totalCredits}"></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-bar fa-2x mb-2"></i>
+                        <h5>平均分</h5>
+                        <h3 th:text="${#numbers.formatDecimal(avgScore, 1, 1)}"></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book fa-2x mb-2"></i>
+                        <h5>课程数</h5>
+                        <h3 th:text="${#lists.size(grades)}"></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成绩列表 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-line me-2"></i>
+                            成绩信息
+                            <span th:if="${currentSemester}" th:text="' - ' + ${currentSemester}"></span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${grades != null and !grades.empty}">
+                            <!-- 成绩表格 -->
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th width="15%">课程名称</th>
+                                            <th width="10%">课程代码</th>
+                                            <th width="10%">学分</th>
+                                            <th width="10%">成绩</th>
+                                            <th width="10%">绩点</th>
+                                            <th width="10%">等级</th>
+                                            <th width="15%">考试类型</th>
+                                            <th width="10%">考试日期</th>
+                                            <th width="10%">状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="grade : ${grades}">
+                                            <td>
+                                                <strong th:text="${grade.course.courseName}"></strong>
+                                                <br>
+                                                <small class="text-muted" th:text="${grade.course.courseType}"></small>
+                                            </td>
+                                            <td th:text="${grade.course.courseCode}"></td>
+                                            <td>
+                                                <span class="badge bg-light text-dark"
+                                                    th:text="${grade.course.credits}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${grade.score != null}"
+                                                    th:class="${grade.score >= 90 ? 'text-success fw-bold' : 
+                                                               grade.score >= 80 ? 'text-primary fw-bold' : 
+                                                               grade.score >= 70 ? 'text-warning fw-bold' : 
+                                                               grade.score >= 60 ? 'text-info fw-bold' : 'text-danger fw-bold'}"
+                                                    th:text="${grade.score}"></span>
+                                                <span th:if="${grade.score == null}" class="text-muted">-</span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${grade.gradePoint != null}"
+                                                    th:class="${grade.gradePoint >= 3.7 ? 'text-success' : 
+                                                               grade.gradePoint >= 3.0 ? 'text-primary' : 
+                                                               grade.gradePoint >= 2.0 ? 'text-warning' : 'text-danger'}"
+                                                    th:text="${grade.gradePoint}"></span>
+                                                <span th:if="${grade.gradePoint == null}" class="text-muted">-</span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${grade.gradeLevel != null}"
+                                                    th:class="${grade.gradeLevel == 'A' or grade.gradeLevel == 'A+' ? 'badge bg-success' : 
+                                                               grade.gradeLevel == 'B+' or grade.gradeLevel == 'B' ? 'badge bg-primary' : 
+                                                               grade.gradeLevel == 'C+' or grade.gradeLevel == 'C' ? 'badge bg-warning' : 'badge bg-danger'}"
+                                                    th:text="${grade.gradeLevel}"></span>
+                                                <span th:if="${grade.gradeLevel == null}" class="text-muted">-</span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${grade.examType != null}"
+                                                    th:class="${grade.examType == '期末' ? 'badge bg-danger' : 
+                                                               grade.examType == '期中' ? 'badge bg-warning' : 'badge bg-info'}"
+                                                    th:text="${grade.examType}"></span>
+                                                <span th:if="${grade.examType == null}" class="text-muted">-</span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${grade.examDate != null}"
+                                                    th:text="${#temporals.format(grade.examDate, 'yyyy-MM-dd')}"></span>
+                                                <span th:if="${grade.examDate == null}" class="text-muted">-</span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${grade.status == 1}" class="badge bg-success">正常</span>
+                                                <span th:if="${grade.status == 0}" class="badge bg-danger">无效</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div th:if="${grades == null or grades.empty}" class="text-center text-muted py-5">
+                            <i class="fas fa-chart-line fa-3x mb-3"></i>
+                            <h5>暂无成绩信息</h5>
+                            <p>请选择其他学期或联系教务部门</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 文华学院 学生管理系统</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

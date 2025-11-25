@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>媒体关注 - 文华学院</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-university me-2"></i>文华学院
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news">新闻中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/announcements">公告通知</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/media">媒体关注</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/departments">学部设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>媒体关注</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">首页</a></li>
+                            <li class="breadcrumb-item active">媒体关注</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <p class="text-muted mb-4">文华学院在教育教学、科学研究、社会服务等方面取得的成就受到各级媒体广泛关注和报道。</p>
+
+                <!-- 媒体报道列表 -->
+                <div th:if="${mediaPage != null and !mediaPage.content.empty}">
+                    <div th:each="media : ${mediaPage.content}" class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="card-title">
+                                        <a th:href="@{/media/detail(id=${media.id})}" th:text="${media.title}"
+                                            class="text-decoration-none"></a>
+                                    </h5>
+                                    <p class="card-text text-muted" th:text="${media.summary}"></p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="fas fa-newspaper me-1"></i>
+                                            <span th:text="${media.mediaSource}"></span>
+                                            <i class="fas fa-calendar ms-2 me-1"></i>
+                                            <span th:text="${#temporals.format(media.createTime, 'yyyy-MM-dd')}"></span>
+                                            <i class="fas fa-eye ms-2 me-1"></i>
+                                            <span th:text="${media.viewCount}"></span>
+                                        </small>
+                                        <a th:if="${media.originalUrl != null and !media.originalUrl.empty}"
+                                            th:href="${media.originalUrl}" target="_blank"
+                                            class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-external-link-alt me-1"></i>阅读原文
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" th:if="${media.imageUrl != null and !media.imageUrl.empty}">
+                                    <img th:src="${media.imageUrl}" class="img-fluid rounded" alt="媒体报道图片">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 空状态 -->
+                <div th:if="${mediaPage == null or mediaPage.content.empty}" class="text-center py-5">
+                    <i class="fas fa-tv fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">暂无媒体报道</h4>
+                    <p class="text-muted">目前没有相关媒体报道，请稍后再来查看。</p>
+                </div>
+
+                <!-- 分页 -->
+                <div th:if="${mediaPage != null and mediaPage.totalPages > 1}" class="d-flex justify-content-center">
+                    <nav aria-label="媒体报道分页">
+                        <ul class="pagination">
+                            <li class="page-item" th:classappend="${mediaPage.first} ? 'disabled' : ''">
+                                <a class="page-link" th:href="@{/media(page=${mediaPage.number - 1})}">上一页</a>
+                            </li>
+                            <li th:each="pageNum : ${#numbers.sequence(0, mediaPage.totalPages - 1)}" class="page-item"
+                                th:classappend="${pageNum == mediaPage.number} ? 'active' : ''">
+                                <a class="page-link" th:href="@{/media(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${mediaPage.last} ? 'disabled' : ''">
+                                <a class="page-link" th:href="@{/media(page=${mediaPage.number + 1})}">下一页</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="text-center">
+                <p>&copy; 2024 文华学院 鄂ICP备09023313号 鄂公网安备42018502003292号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
